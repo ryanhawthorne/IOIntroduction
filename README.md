@@ -1,10 +1,19 @@
 # Welcome and acknowledgement
 
-Welcome to this online course on R and econometrics for industrial organisation!
+Welcome to this online course on R and econometrics for industrial organisation! This course closely follows the work of Prof. Sebastian Kranz (Ulm University):
 
 - Empirical Industrial Organisation and Consumer Choice: https://github.com/skranz/Empirical_IO_Course 
 - Market analysis with econometrics and machine learning: https://github.com/skranz/MarketAnalysis
 
+# Setting up R, Latex and Github
+
+We are going to use R, Latex and GitHub for reproducible research! It is free. Please download and install:
+
+- R (econometrics software): https://cran.r-project.org/
+- RStudio (works with R and Latex): https://rstudio.com/products/rstudio/download/#download
+- Latex (I use Texlive but any other distribution will do) : https://www.tug.org/texlive/
+- Sign up for Github (for version control): https://github.com/ and download Github desktop: https://desktop.github.com/
+- You can always use rstudio.cloud if you are struggling with installing R, Rstudio and Latex
 
 # Licence
 
