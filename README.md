@@ -1,7 +1,6 @@
 # Welcome and acknowledgement
 
-Welcome to this tutorial on R and econometrics for industrial organisation, accompanying Prof. Lukasz Grzybowski's lectures.    
-This tutorial closely follows the work of Prof. Sebastian Kranz (Ulm University):
+Welcome to this tutorial on R and econometrics for industrial organisation, accompanying Prof. Lukasz Grzybowski's lectures. This tutorial closely follows the work of Prof. Sebastian Kranz (Ulm University):
 
 - Empirical Industrial Organisation and Consumer Choice: https://github.com/skranz/Empirical_IO_Course 
 - Market analysis with econometrics and machine learning: https://github.com/skranz/MarketAnalysis
