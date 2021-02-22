@@ -21,7 +21,7 @@ We are going to use R, Latex and GitHub for reproducible research! It is free. P
 
 Once you have installed everything, and signed up for the necessary:
 
-- Go to https://github.com/ryanhawthorne/IOIntroduction, click on 'fork', then 'code', then 'Open with Github desktop' 
+- On the top right of this page, click on 'fork', then 'code', then 'Open with Github desktop' 
 - Open RStudio on your computer, click on 'new project', then browse to the folder that you just cloned the git repo into (in Windows, probably: /Documents/GitHub/IOIntroduction)
 
 
