@@ -1,6 +1,6 @@
 # Welcome and acknowledgement
 
-Welcome to this tutorial on R and econometrics for industrial organisation, accompanying Prof. Lukasz Grzybowski's lectures.  
+Welcome to this tutorial on R and econometrics for industrial organisation, accompanying Prof. Lukasz Grzybowski's lectures.    
 This tutorial closely follows the work of Prof. Sebastian Kranz (Ulm University):
 
 - Empirical Industrial Organisation and Consumer Choice: https://github.com/skranz/Empirical_IO_Course 
@@ -24,7 +24,7 @@ Once you have installed everything, and signed up for the necessary:
 
 - On the top right of this page (repository), click on 'fork', and add it to your personal GitHub account
 - Then click on 'code', then 'Open with Github desktop', then 'clone' 
-- Open RStudio on your computer, click on 'new project', then browse to the folder that you just cloned the git repo into (in Windows, probably: /Documents/GitHub/IOIntroduction)
+- Open RStudio on your computer, click on 'new project', then 'existing directory', then browse to the folder that you just cloned the git repo into (in Windows, probably: /Documents/GitHub/IOIntroduction)
 
 You should now have all the slides and the dataset for this tutorial on your computer or in rstudio.cloud.
 
