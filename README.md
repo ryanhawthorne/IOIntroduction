@@ -13,7 +13,7 @@ We are going to use R, Latex and GitHub for reproducible research! It is free. P
 - RStudio (works with R and Latex): https://rstudio.com/products/rstudio/download/#download
 - Latex (I use Texlive but any other distribution will do) : https://www.tug.org/texlive/
 - Sign up for Github (for version control): https://github.com/ and download Github desktop: https://desktop.github.com/
-- You can always use rstudio.cloud if you are struggling with installing R, Rstudio and Latex
+- You can always use https://rstudio.cloud/ if you are struggling with installing R, Rstudio and Latex
 
 # Licence
 
