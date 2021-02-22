@@ -5,7 +5,9 @@ Welcome to this online course on R and econometrics for industrial organisation!
 - Empirical Industrial Organisation and Consumer Choice: https://github.com/skranz/Empirical_IO_Course 
 - Market analysis with econometrics and machine learning: https://github.com/skranz/MarketAnalysis
 
-# Setting up R, Latex and Github
+# Getting started: setting up R, Latex and Github
+
+## Download and install software
 
 We are going to use R, Latex and GitHub for reproducible research! It is free. Please download and install:
 
@@ -14,6 +16,33 @@ We are going to use R, Latex and GitHub for reproducible research! It is free. P
 - Latex (I use Texlive but any other distribution will do) : https://www.tug.org/texlive/
 - Sign up for Github (for version control): https://github.com/ and download Github desktop: https://desktop.github.com/
 - You can always use https://rstudio.cloud/ if you are struggling with installing R, Rstudio and Latex
+
+## Getting started
+
+Once you have installed everything, and signed up for the necessary:
+
+- Go to https://github.com/ryanhawthorne/IOIntroduction, click on 'fork', then 'code', then 'Open with Github desktop' 
+- Open RStudio on your computer, click on 'new project', then browse to the folder that you just cloned the git repo into (in Windows, probably: /Documents/GitHub/IOIntroduction)
+
+
+## Trying out RMarkdown
+
+In RStudio, once you have opened your project:
+
+- Click on 'file', 'new file', 'Rmarkdown', 'PDF', and save it ('tutorial1')
+- Click on 'knit'
+- RMarkdown is a great way to have your report text and econometrics code in the same file
+
+## Trying out Git
+
+In RStudio:
+
+- Head over to git on the top right hand side, select files you'd like to commit, click 'commit', add a message (e.g. 'first commit'), and then click 'commit', then 'push'
+- Git is a version control system that you can use to roll back to any version of your work
+- Commit frequently
+- You may want to add a branch, perhaps called 'local', so that you are not working on the 'master' (production) version
+
+You can have a look at your latest commit and push on github.com
 
 # Licence
 
