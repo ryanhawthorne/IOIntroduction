@@ -1,6 +1,7 @@
 # Welcome and acknowledgement
 
-Welcome to this online course on R and econometrics for industrial organisation! This course closely follows the work of Prof. Sebastian Kranz (Ulm University):
+Welcome to this tutorial on R and econometrics for industrial organisation, accompanying Prof. Lukasz Grzybowski's lectures.  
+This tutorial closely follows the work of Prof. Sebastian Kranz (Ulm University):
 
 - Empirical Industrial Organisation and Consumer Choice: https://github.com/skranz/Empirical_IO_Course 
 - Market analysis with econometrics and machine learning: https://github.com/skranz/MarketAnalysis
@@ -25,6 +26,7 @@ Once you have installed everything, and signed up for the necessary:
 - Then click on 'code', then 'Open with Github desktop' 
 - Open RStudio on your computer, click on 'new project', then browse to the folder that you just cloned the git repo into (in Windows, probably: /Documents/GitHub/IOIntroduction)
 
+You should now have all the slides and the dataset for this tutorial on your computer or in rstudio.cloud.
 
 ## Trying out RMarkdown
 
