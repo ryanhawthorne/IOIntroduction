@@ -1,0 +1,141 @@
+---
+title: "Class_1b_ols_sim"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+Often it is the case that we don't have enough control variables to solve all endogeniety problems. Sometimes one can then use *instrumental variable* (IV) estimation instead.   
+
+a) Below we simulate a model for the demand function
+
+    q = beta0 + beta1 * p + beta2 * s + eps
+    
+This time we consider profit maximizing prices `p` assuming that both `s` and the demand shock `eps` are taken into account when setting prices. Just run the code below:
+
+```{r "3_a"}
+T = 2000
+beta0 = 100
+beta1 = -1
+beta2 = 20
+
+c = runif(T,0,20) # variable costs
+s = sample(0:1, T, replace = TRUE)
+eps = rnorm(T,0,8) # demand shocks
+
+p = (beta0 + beta2*s+ eps) / (-2*beta1) +c/2
+q = beta0 + beta1*p + beta2*s + eps
+```
+
+## conditions for valid instruments
+
+b) Replace the ? below by the names of the two variables that are valid instruments for the prices `p` when estimating the demand function via IV. (Take a look at the corresponding slides.)
+
+```{r "3_b",optional=TRUE}
+c("?","?")
+
+# enter your code here ...
+
+```
+
+
+c) A valid instrument must satisfy two conditions: one particular correlation must be different from zero, another correlation must be equal to zero. Compute these two correlations for our simulated data for our excluded instrument `c`.
+
+```{r "3_c",optional=TRUE}
+# Compute the correlation that shall not be zero
+# (Relevance condition)
+
+# enter your code here ...
+
+# Compute the correlation that shall be zero
+# (Exogeniety condition.)
+
+# enter your code here ...
+
+```
+
+The correlation between the instrument and explanatory variable can also be computed for not simulated data and there is a formal `weak instrument test` that is possible.
+
+On the other hand, it is hard to test the condition that instruments are uncorrelated with the disturbance since in real data we do not observe the disturbance `eps`. Similar to assessing whether an explanatory variable is endogenous, one has to think about which factors are included in `eps` and assess by common wisdom or knowledge of economic models whether `eps` is likely to be uncorrelated with the instrument or not.
+
+Also note that for a particular sample of simulated data, we will always find a little bit of correlation between `c` and `eps`. But we know from the data generating process, i.e. the R code above that generates the data, that `c` and `eps` are drawn independently from each other and thus are uncorrelated when seen as random variables.
+
+
+## IV Estimation via Two-Stage-Least Squares Regression
+
+The key idea of instrumental variable estimation is that we only use the variation of the endogenous variable that is induced by the exogenous instruments to estimate the effect on the dependent variable.  
+
+This key idea can be better seen if we perform the IV estimation manually via two stage least squares (2SLS):
+
+d) Run the first stage regression: Use `lm` to regress the endogenous explanatory variable on your two instruments. Save the results in `reg1`. (Please write in your formula the excluded instrument before the other instrument.)
+```{r "3_d"}
+
+# enter your code here ...
+
+```
+
+e) Use the function `fitted` to assign to the variable `p.hat` the predicted values of the dependent variable of `reg1`.
+
+```{r "3_e"}
+
+# enter your code here ...
+
+```
+
+Note the difference to the regression anatomy of a multiple regression. Here `p.hat` contains only the variation in prices that *can* be explained by the instruments. In the regression anatomy `p.tilde` contained only the residual variation of prices that *cannot* be explained by the other control variables.
+
+f) Run the second stage regression: Use `lm` to estimate the original demand function with prices `p` being replaced by the fitted values `p.hat`. Store the results in the variable `reg2` and show a summary of `reg2`.
+
+```{r "3_f"}
+
+# enter your code here ...
+
+```
+
+The estimated coefficients are pretty close to the true coefficients `beta1=-1` and `beta2=20`. Indeed the two-stage least squares procedure solves the endogeneity problem and we get consistent estimates!
+
+Since we control in the second stage for `s`, the relevant variation in prices that identifies our estimate `beta1.hat` is only the variation in the excluded instrument: the cost `c`. 
+
+Since `c` is exogenous, so is `p.hat`. To see this, compute the correlations of `p.hat` with `eps` and for comparison also the correlation of `p` with `eps`.
+
+```{r "3_f_2",optional=TRUE}
+
+# enter your code here ...
+
+
+# enter your code here ...
+
+```
+
+
+
+Note that the estimated standard errors in the second stage regression `reg2` are not correct. In practice, it is best if you use an existing R function to run an IV regression.
+
+## Direct IV Estimation
+
+g) Load the R package AER and look at the help for the function `ivreg`, which allows you to perform IV estimation directly. Use `ivreg` to estimate the demand function instrumenting prices p with costs c. Save the regression result in the variable `iv` and show a summary of `iv`. (For RTutor to correctly check your solution, please write the instruments in your formula by starting with `c`.)
+```{r "3_g"}
+
+# enter your code here ...
+
+
+# enter your code here ...
+
+```
+
+We find the same (consistent) estimates than in our second stage regression `reg2`. The standard errors are different, however. We now have the correct standard errors. 
+
+h) Call `summary(iv, diagnostics=TRUE)` to get more details.
+
+```{r "3_h",optional=TRUE}
+
+# enter your code here ...
+
+```
+
+We will explain later in the course what the different values and the diagnostic tests mean.
+
