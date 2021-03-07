@@ -23,6 +23,7 @@ Once you have installed everything, and signed up for the necessary:
 - On the top right of this page (repository), click on 'fork', and add it to your personal GitHub account
 - Then click on 'code', then 'Open with Github desktop', then 'clone' 
 - Open RStudio on your computer, click on 'new project', then 'existing directory', then browse to the folder that you just cloned the git repo into (in Windows, probably: /Documents/GitHub/IOIntroduction)
+- In RStudio, open the file '0 starthere.R' and click 'run' in the top right hand side
 
 You should now have all the slides and the dataset for this tutorial on your computer or in rstudio.cloud.
 
