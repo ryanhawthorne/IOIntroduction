@@ -1,0 +1,313 @@
+---
+title: "Homogenous demand, conduct exercise"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1 Import & clean data, produce descriptive statistics
+
+## Import data
+
+First, import the data into a data frame, called coffee_raw:
+
+```{r import}
+
+```
+
+## Deflate prices using price index
+
+Next, deflate the prices, save a new data frame, coffee:
+
+```{r deflate, echo=FALSE}
+library(dplyr)
+
+
+```
+
+## Explore variations in price over time
+
+Convert year/month variable into R time format, using as.Date and as.yearmon from the zoo package:
+
+```{r date}
+library(zoo)
+coffee <- coffee %>%
+  mutate(date = as.Date(as.yearmon(month)))
+  
+```
+
+
+## Make some nice line graphs
+
+Create simple line graphs of key price and income variables over time.
+
+Basic plot of coffee price over time.
+
+```{r cprice, echo=FALSE}
+
+
+
+```
+```{r bprice, echo=FALSE}
+
+
+```
+Basic plot of tea price against time:
+
+```{r tprice, echo=FALSE}
+
+
+```
+Plot of wage prices over time:
+
+```{r wprice}
+
+
+```
+Basic plot of income against time:
+
+```{r income}
+
+
+```
+Plot of other prices over time:
+
+```{r oprice}
+
+
+```
+
+Now plot coffee retail price against the bean price using ggplot2 and geom_line:
+
+```{r wholesale_retail}
+library(ggplot2)
+
+
+
+```
+## Summary statistics
+
+Produce a table of summary statistics for qu, cprice, tprice, wprice, bprice, incom using dplyr select:
+
+```{r summary}
+
+```
+Now consider summary statistics for quarter 1 alone:
+
+```{r summary_q1}
+
+```
+Now do the same for q2, q3, and q4.
+
+## Considering prices and quantities
+
+First, use ggplot to produce a scatter graph of prices and quantities using geom_point:
+
+```{r p_q, echo=FALSE}
+
+
+```
+Now do the same thing but only for the first quarter:
+
+```{r filter}
+
+
+```
+
+Now consider for q2, q3 and q4.
+
+## Assess relationship between tea price and quantity demanded of coffee
+
+
+```{r tprice_q}
+
+
+```
+
+## Price of coffee and labor costs
+
+Consider the price of coffee and wages:
+
+```{r cprice_w}
+coffee %>%
+  ggplot(aes(x = wprice)) + 
+    geom_point(aes(y = cprice))
+
+```
+
+## Price of coffee and price of tea
+
+Look at the relationship between the price of coffee and the price of tea:
+
+```{r tprice_cprice}
+
+
+```
+
+## Overall correlations
+
+Produce a correlation matrix for qu, cprice, tprice, wprice, bprice, incom: 
+
+```{r cor}
+
+
+```
+## create log variables  
+
+We need our variables to be in logs:
+
+```{r logs, echo=FALSE, include = FALSE }
+coffee <- coffee %>%
+  mutate(ln_qu=log(qu),
+         ln_cprice=log(cprice),
+         ln_tprice=log(tprice),
+         ln_bprice=log(bprice),
+         ln_wprice=log(wprice),
+         ln_incom=log(incom))
+```
+
+# Considering the basic relationships
+
+## Basic demand regressions
+
+Regress log quantity on log price and seasonal dummies and store as q_p1:
+
+```{r q_p}
+
+
+```
+Including tea price, save as q_p2:
+
+```{r q_p2}
+
+
+```
+Include income, save as q_p3:
+
+```{r q_p3}
+
+
+```
+# Estimating theta
+
+## Instrumental variable regressions
+
+Run an instrumental variable regression, using prices, quantities, seasonal dummies and instrument, first without team and income, and secondly with tea and income:
+
+```{r iv1}
+library("AER")
+
+
+```
+## Now lets show the adjusted learner index
+
+Compute the adjusted lerner index using our cost information and our estimate of $\gamma$:
+
+```{r lerner_adj, echo= FALSE}
+
+k= # kg of beans per kg of coffee
+c0= # by assumption (4 guilders)
+gamma=
+
+# obtain the cost function    
+cost = 
+
+# compute Lerner index
+coffee$Ln= 
+  
+# now compute adjusted Lerner index  
+coffee$Ln_adj=
+
+# summary statistics for our adjusted Lerner index  
+summary(coffee$Ln_adj)
+
+# consider adjusted lerner for only q1, using filter
+coffee %>%
+
+
+```
+Now, consider for q2, q3, and q4.
+
+## Estimating conduct parameter
+
+```{r conduct}
+conduct1 <- lm(cprice ~ cost + q1 + q2 + q3 -1, data = coffee) # omits intercept
+summary(conduct1)
+
+conduct2 <- lm(cprice ~ cost -1, data = coffee) # omits intercept
+summary(conduct2)
+```
+
+From the FOC we have: $p=\frac{\gamma}{(\gamma+\theta)}c$
+This is the estimated coefficient for cost.
+
+```{r theta1}
+
+b=1.47
+theta=gamma*(1-b)/b
+summary(theta)
+
+n=1/theta
+summary(n)    
+
+```
+
+## Linear demand 
+
+$Q=\beta(\alpha-P)$
+
+```{r}
+
+linear1 <- ivreg(qu ~ cprice + incom + q1 + q2 + q3 | bprice + incom + q1 + q2 + q3, data = coffee)
+summary(linear1)
+linear2 <- ivreg(qu ~ cprice + q1 + q2 + q3 | bprice + q1 + q2 + q3, data = coffee)
+summary(linear2)
+```
+Compute adjusted learner index:
+
+```{r lerner_adj2}
+coffee$gamma_l=-0.015*coffee$cprice/coffee$qu
+coffee$Ln_adj_l=-coffee$gamma_l*coffee$Ln
+```
+
+Now summarise the lerner indices:
+
+```{r l_adj1_summary}
+coffee %>%
+  select(Ln_adj_l) %>%
+  summary()
+```
+Now summarise by quarters.
+
+## Demand rotaters
+
+Create seasonal demand rotators:
+
+```{r rotators}
+coffee <- coffee %>%
+  mutate(cprice_q1=cprice*q1,
+         bprice_q1=bprice*q1,
+         cprice_q2=cprice*q2,
+         bprice_q2=bprice*q2,
+         cprice_q3=cprice*q3,
+         bprice_q3=bprice*q3,
+         cprice_q4=cprice*q4,
+         bprice_q4=bprice*q4
+  )
+
+```
+
+Can also use use demand rotators in regression:
+
+```{r lm_rotators}
+rotator <- ivreg(qu ~  q1 + q2 + q3 + (cprice + cprice_q1) | 
+                   (bprice + bprice_q1) + q1 + q2 + q3 , data = coffee)
+summary(rotator)
+
+```
+
+
+
+
