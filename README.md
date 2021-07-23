@@ -13,6 +13,7 @@ We are going to use R, Latex and GitHub for reproducible research! It is free. P
 - R (econometrics software): https://cran.r-project.org/
 - RStudio (works with R and Latex): https://rstudio.com/products/rstudio/download/#download
 - Latex (I use Texlive but any other distribution will do) : https://www.tug.org/texlive/
+- Git (if you are using Windows: https://gitforwindows.org/)
 - Github desktop: https://desktop.github.com/, and sign up for Github (for version control): https://github.com/ 
 - You can always use https://rstudio.cloud/ if you are struggling with installing R, Rstudio and Latex
 
