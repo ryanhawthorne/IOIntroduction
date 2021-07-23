@@ -16,14 +16,14 @@ T = 20
 beta0 = 100
 beta1 = -1;
 # Draw vector of random prices uniformly distributed between 30 and 50
-p = ___ 
+p = runif(T, min = 30, max = 50) 
 
 # Draw vector of demand shocks eps normally distributed with mean 0 and
 # standard deviation 2
-eps = ___
+eps = rnorm(T, mean = 0, sd = 2)
 
 # Compute the resulting demand q
-q = ___
+q = beta0 + eps + beta1 * p
 
 
 ```
@@ -34,6 +34,7 @@ b) Now use the function `lm` to estimate the demand function via OLS.
 ```{r "1_b"}
 
 # enter your code here ...
+lm(q ~ p)
 
 ```
 
@@ -41,9 +42,10 @@ c) Call the same `lm` command but store the result in a variable called `reg`. N
 ```{r "1_c"}
 
 # enter your code here ...
-
+reg <- lm(q ~ p)
 
 # enter your code here ...
+summary(reg)
 
 ```
 
@@ -60,17 +62,19 @@ d) While `summary` prints the results it does not allow us to use these values e
 ```{r "1_d"}
 
 # enter your code here ...
-
+coef(reg)
 ```
 
 Now follow the comments in the next code chunk to get all relevant columns of the shown coefficient table as a data frame.
 ```{r "1_d_2"}
 # Load the package broom
-
+library(broom)
 # Call the function tidy on reg and store the result in the
 # variable sum
+sum <- tidy(reg)
 
 # Show sum 
+sum
 
 # enter your code here ...
 
@@ -79,10 +83,11 @@ Now follow the comments in the next code chunk to get all relevant columns of th
 e) We now want to compute the 95% confidence intervals for our estimated coefficients using the rule of thumb from the lecture slides (estimate plus-minus two standard errors). Replace the ___ in the code below that uses the `dplyr` function `mutate`:
 
 ```{r "1_e",optional=TRUE, eval=FALSE, include = FALSE}
+library(dplyr)
 sum %>%
   mutate(
     conf.lower = estimate - 2 * std.error,
-    conf.upper = ___
+    conf.upper = estimate + 2 * std.error
   )
 
 # enter your code here ...
@@ -95,6 +100,7 @@ To compute the exact 95% confidence intervals (not our rule of thumb) call now t
 ```{r "1_e_2"}
 
 # enter your code here ...
+confint(reg)
 
 ```
 
@@ -103,14 +109,25 @@ f) Now we want to write an R function called `sim.and.est`. Add the code as expl
 
 ```{r "1_f", eval=FALSE, include = FALSE}
 # A function that simulates demand data and estimates the demand function
-sim.and.est = function(T=10) { 
+sim.and.est = function(T = 10) { 
   # Insert here your code from a)
   # to simulate our demand data
   # 
   # But don't add the line 
   # T=20
   # since we have the parameter T as function argument
+  beta0 = 100
+  beta1 = -1;
+  # Draw vector of random prices uniformly distributed between 30 and 50
+  p = runif(T, min = 30, max = 50) 
 
+  # the cat in the hat
+  # Draw vector of demand shocks eps normally distributed with mean 0 and
+  # standard deviation 2
+  eps = rnorm(T, mean = 0, sd = 2)
+
+  # Compute the resulting demand q
+  q = beta0 + eps + beta1 * p
     
   # To make the function better readable
   # Select your entered code above
@@ -123,7 +140,7 @@ sim.and.est = function(T=10) {
   
   # Estimate demand function  
   reg = lm(q~p)
-
+      
   # Compute confidence interval
   conf = confint(reg,"p")
   
@@ -148,6 +165,7 @@ g) Call `sim.and.est` twice with the argument T=10.
 ```{r "1_g"}
 
 # enter your code here ...
+sim.and.est(T = 10)
 
 ```
 
@@ -158,6 +176,7 @@ Now call `sim.and.est` twice with the Argument `T=1000`.
 ```{r "1_g_2"}
 
 # enter your code here ...
+sim.and.est(T=1000)
 
 ```
 
@@ -196,13 +215,15 @@ Load that data set into the variable `dat` using the function `readRDS`. Make su
 ```{r "2_a"}
 
 # enter your code here ...
-
+dat <- readRDS("ols_sim.Rds")
 ```
 
 Now use the function `head` to show the first rows of `dat`:
 ```{r "2_a_2"}
 
 # enter your code here ...
+str(dat)
+head(dat)
 
 ```
 
@@ -210,7 +231,9 @@ b) Replace the ___ in the filter command below to store in the data.frame `d10` 
 
 ```{r "2_b", eval=FALSE, include = FALSE}
 library(dplyr)
-d10 = filter(dat, T == ___)
+d10 = filter(dat, T == 10)
+d10 <- dat %>%
+  filter(T == 10)
 
 # enter your code here ...
 
@@ -221,6 +244,10 @@ c) Using the command `hist`, draw a histogram of your simulated estimates `beta1
 ```{r "2_c"}
 
 # enter your code here ...
+hist(d10$beta1.hat,  
+     breaks = 5,
+     col = "Red",
+     xlab = "b1 estimate")
 
 ```
 
@@ -231,6 +258,9 @@ d) Using the corresponding R functions, compute the standard deviation and mean 
 ```{r "2_d",optional=TRUE}
 
 # enter your code here ...
+sd(d10$beta1.hat)
+mean(d10$beta1.hat)
+
 
 ```
 
@@ -243,8 +273,12 @@ e) Now also compute the simulated Bias and Mean Squared Error (MSE) of `beta1.ha
 beta1 = -1
 
 # enter your code here ...
+bias = mean(d10$beta1.hat - beta1)
+bias
 
 # enter your code here ...
+mse = mean((d10$beta1.hat - beta1) ^ 2 )
+mse
 
 
 # enter your code here ...
@@ -263,9 +297,10 @@ f) Let us now compute how often the true parameter `beta1` is inside the 95% con
 # Replace the ___ to complete the code
 times.in.conf = sum(
     d10$beta1 > d10$conf.lower &
-    ___         
+    d10$beta1 < d10$conf.upper         
   )
 # Show times.in.conf
+times.in.conf
 
 # enter your code here ...
 
@@ -315,10 +350,14 @@ dat %>%
   group_by(T) %>%
   summarize(
     mse = mean((beta1.hat-beta1)^2),
-    sd = ___
+    sd = sd(beta1.hat)
   )
 
 # enter your code here ...
+
+dat %>%
+  group_by(T) %>%
+  summary()
 
 ```
 
@@ -345,7 +384,7 @@ c = runif(T, 20,30)
 
 # Compute the profit maximizing prices p 
 
-p = ___
+p = (beta0 + eps)/(-2*beta1) + c / 2
 
 # enter your code here ...
 
@@ -358,6 +397,8 @@ b) Now estimate the demand function via OLS using the R function `lm`. Save the 
 ```{r "3_b"}
 
 # enter your code here ...
+reg <- lm(q ~ p)
+summary(reg)
 
 ```
 
@@ -383,7 +424,8 @@ Compute that expression (adapted to our regression) and save the result in the v
 ```{r "3_d"}
 
 # enter your code here ...
-
+bias.hat <- cor(p,eps)*sd(eps)/sd(p)
+bias.hat
 
 # enter your code here ...
 
@@ -394,7 +436,9 @@ Save now in the variable `beta1.hat` the estimate for `beta1` from your regressi
 ```{r "3_d_2"}
 
 # enter your code here ...
-
+beta1.hat <- coef(reg)[[2]]
+beta1.hat
+beta1.hat - beta1
 
 # enter your code here ...
 
@@ -410,7 +454,8 @@ What happens if we use the *residuals*
 ```{r "3_e"}
 
 # enter your code here ...
-
+eps.hat = resid(reg)
+  
 ```
 
 Now compute two correlations: the correlation between the explanatory variable `p` and the *disturbance* `eps` and the correlation between  `p` and the *residual* `eps.hat`.
@@ -418,6 +463,8 @@ Now compute two correlations: the correlation between the explanatory variable `
 ```{r "3_e_2"}
 
 # enter your code here ...
+cor(p, eps)
+cor(p, eps.hat)
 
 ```
 
@@ -474,6 +521,7 @@ Run now the simulation study again in the chunk below with more replications, e.
 ```{r "3_f_2"}
 
 # enter your code here ...
+dat <- simulation.study(sim.and.est2,par = list(T=100, price.type=c("random","optimal")), repl=100)
 
 ```
 
@@ -481,7 +529,7 @@ g) We now want to plot the distributions of `beta1.hat` for the case of random a
 
 ```{r "3_g", eval=FALSE, include = FALSE}
 library(ggplot2)
-ggplot(dat, aes(x=___, fill=___)) +
+ggplot(dat, aes(x=beta1.hat, fill=price.type)) +
   geom_density()
 
 # enter your code here ...
@@ -497,7 +545,7 @@ h) To compute the expected value of `beta1.hat` for each price type (random or o
 
 ```{r "3_h", eval=FALSE, include = FALSE}
 dat %>% 
-  group_by(___) %>%
+  group_by(price.type) %>%
   summarize(mean.beta1.hat = mean(beta1.hat))
 
 # enter your code here ...

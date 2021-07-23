@@ -1,0 +1,18 @@
+{"type":["init_ps"],"time":["2021-03-17 18:54:28"],"user":["RyanHawthorne"],"umph":[1616000068.9798],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2021-03-17 18:54:29"],"user":["RyanHawthorne"],"umph":[1616000069.8323],"ok":[false],"chunk":[1],"ex":[1],"e.ind":[4],"code":["T = 20\nbeta0 = 100\nbeta1 = -1;\n# Draw vector of random prices uniformly distributed between 30 and 50\np = .PH_._ \n\n# Draw vector of demand shocks eps normally distributed with mean 0 and\n# standard deviation 2\neps = .PH_._\n\n# Compute the resulting demand q\nq = .PH_._\n\n"],"message":["\nYou have not made a correct assignment to p in chunk 1_a."]}
+,
+{"type":["check_ps"],"time":["2021-03-17 18:54:56"],"user":["RyanHawthorne"],"umph":[1616000096.0724],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2021-03-17 18:54:56"],"user":["RyanHawthorne"],"umph":[1616000096.261],"ok":[false],"chunk":[1],"ex":[1],"e.ind":[4],"code":["T = 20\nbeta0 = 100\nbeta1 = -1;\n# Draw vector of random prices uniformly distributed between 30 and 50\np = .PH_._ \n\n# Draw vector of demand shocks eps normally distributed with mean 0 and\n# standard deviation 2\neps = .PH_._\n\n# Compute the resulting demand q\nq = .PH_._\n\n"],"message":["\nYou have not made a correct assignment to p in chunk 1_a."]}
+,
+{"type":["hint"],"time":["2021-03-17 18:55:17"],"user":["RyanHawthorne"],"umph":[1616000117.2448],"ok":[true],"chunk":[1],"ex":[1],"e.ind":[4]}
+,
+{"type":["check_ps"],"time":["2021-03-17 18:57:09"],"user":["RyanHawthorne"],"umph":[1616000229.4238],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2021-03-17 18:57:10"],"user":["RyanHawthorne"],"umph":[1616000230.2968],"ok":[true],"chunk":[1],"ex":[1],"e.ind":[0],"code":["T = 20\nbeta0 = 100\nbeta1 = -1;\n# Draw vector of random prices uniformly distributed between 30 and 50\np = runif(T, min = 30, max = 50) \n\n# Draw vector of demand shocks eps normally distributed with mean 0 and\n# standard deviation 2\neps = rnorm(T, mean = 0, sd = 2)\n\n# Compute the resulting demand q\nq = beta0 + eps + beta1 * p\n\n"],"message":[""]}
+,
+{"type":["check_chunk"],"time":["2021-03-17 18:57:10"],"user":["RyanHawthorne"],"umph":[1616000230.4513],"ok":[false],"chunk":[2],"ex":[1],"e.ind":[1],"code":["\n# enter your code here ...\n"],"message":["\nYou have not yet entered all correct commands in chunk 1_b."]}
+,
+{"type":["hint"],"time":["2021-03-17 18:57:27"],"user":["RyanHawthorne"],"umph":[1616000247.7795],"ok":[true],"chunk":[2],"ex":[1],"e.ind":[1]}
+,

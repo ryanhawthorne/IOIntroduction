@@ -1,7 +1,7 @@
 
 ```{r 'check_ps', include=FALSE}
 
-user.name = 'JohnDoe' # set to your user name
+user.name = 'RyanHawthorne' # set to your user name
 
 # To check your problem set, run the 
 # RStudio Addin 'Check Problemset'
@@ -22,14 +22,14 @@ T = 20
 beta0 = 100
 beta1 = -1;
 # Draw vector of random prices uniformly distributed between 30 and 50
-p = ___ 
+p = runif(T, min = 30, max = 50) 
 
 # Draw vector of demand shocks eps normally distributed with mean 0 and
 # standard deviation 2
-eps = ___
+eps = rnorm(T, mean = 0, sd = 2)
 
 # Compute the resulting demand q
-q = ___
+q = beta0 + eps + beta1 * p
 
 
 ```

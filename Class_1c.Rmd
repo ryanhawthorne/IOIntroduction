@@ -75,6 +75,10 @@ d) Run the first stage regression: Use `lm` to regress the endogenous explanator
 ```{r "3_d"}
 
 # enter your code here ...
+reg1 <- lm(p ~ c + s)
+summary(reg1)
+
+
 
 ```
 
@@ -83,6 +87,8 @@ e) Use the function `fitted` to assign to the variable `p.hat` the predicted val
 ```{r "3_e"}
 
 # enter your code here ...
+p.hat = fitted(reg1)
+
 
 ```
 
@@ -90,11 +96,25 @@ Note the difference to the regression anatomy of a multiple regression. Here `p.
 
 f) Run the second stage regression: Use `lm` to estimate the original demand function with prices `p` being replaced by the fitted values `p.hat`. Store the results in the variable `reg2` and show a summary of `reg2`.
 
-```{r "3_f"}
+```{r "3_f", include=FALSE}
 
 # enter your code here ...
+reg2 <- lm(q ~ p.hat + s)
+summary(reg2)
+
+library(broom)
+
 
 ```
+
+```{r }
+
+reg2 %>%
+  tidy() %>%
+  kable()
+
+```
+
 
 The estimated coefficients are pretty close to the true coefficients `beta1=-1` and `beta2=20`. Indeed the two-stage least squares procedure solves the endogeneity problem and we get consistent estimates!
 
@@ -105,9 +125,10 @@ Since `c` is exogenous, so is `p.hat`. To see this, compute the correlations of 
 ```{r "3_f_2",optional=TRUE}
 
 # enter your code here ...
-
+cor(p.hat, eps)
 
 # enter your code here ...
+cor(p, eps)
 
 ```
 
@@ -120,8 +141,10 @@ Note that the estimated standard errors in the second stage regression `reg2` ar
 g) Load the R package AER and look at the help for the function `ivreg`, which allows you to perform IV estimation directly. Use `ivreg` to estimate the demand function instrumenting prices p with costs c. Save the regression result in the variable `iv` and show a summary of `iv`. (For RTutor to correctly check your solution, please write the instruments in your formula by starting with `c`.)
 ```{r "3_g"}
 
+library("AER")
 # enter your code here ...
-
+iv <- ivreg(q ~ s + p | c + s)
+summary(iv)
 
 # enter your code here ...
 

@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 First, import the data into a data frame, called coffee_raw:
 
 ```{r import}
+coffee_raw <- read.csv("dutch_coffee.csv")
 
 ```
 
@@ -24,6 +25,12 @@ Next, deflate the prices, save a new data frame, coffee:
 ```{r deflate, echo=FALSE}
 library(dplyr)
 
+coffee <- coffee_raw %>%
+  mutate(cprice = cprice/oprice,
+         tprice = tprice/oprice,
+         bprice = bprice/oprice,
+         wprice = wprice/oprice,
+         incom = incom/oprice)
 
 ```
 
@@ -46,36 +53,40 @@ Create simple line graphs of key price and income variables over time.
 Basic plot of coffee price over time.
 
 ```{r cprice, echo=FALSE}
-
+plot(cprice ~ date, coffee)
 
 
 ```
-```{r bprice, echo=FALSE}
 
+Basic plot of coffee bean price over time.
+
+```{r bprice, echo=FALSE}
+plot(bprice ~ date, coffee)
 
 ```
 Basic plot of tea price against time:
 
 ```{r tprice, echo=FALSE}
 
+plot(tprice ~ date, coffee)
 
 ```
 Plot of wage prices over time:
 
 ```{r wprice}
-
+plot(wprice ~ date, coffee)
 
 ```
 Basic plot of income against time:
 
 ```{r income}
-
+plot(incom ~ date, coffee)
 
 ```
 Plot of other prices over time:
 
 ```{r oprice}
-
+plot(oprice ~ date, coffee)
 
 ```
 
@@ -83,7 +94,9 @@ Now plot coffee retail price against the bean price using ggplot2 and geom_line:
 
 ```{r wholesale_retail}
 library(ggplot2)
-
+ggplot(coffee, aes(date)) +
+  geom_line(aes(y = cprice), colour="red") + 
+    geom_line(aes(y = bprice), colour="green") 
 
 
 ```
@@ -93,13 +106,29 @@ Produce a table of summary statistics for qu, cprice, tprice, wprice, bprice, in
 
 ```{r summary}
 
+coffee %>%
+  select(qu, cprice, tprice, wprice, bprice, incom) %>%
+  summary()
+
 ```
 Now consider summary statistics for quarter 1 alone:
 
 ```{r summary_q1}
+coffee %>%
+  filter(q1 == 1) %>%
+  select(qu, cprice, tprice, wprice, bprice, incom) %>%
+  summary()
 
 ```
 Now do the same for q2, q3, and q4.
+
+```{r summary_q2}
+coffee %>%
+  filter(q2 == 1) %>%
+  select(qu, cprice, tprice, wprice, bprice, incom) %>%
+  summary()
+
+```
 
 ## Considering prices and quantities
 
@@ -107,22 +136,51 @@ First, use ggplot to produce a scatter graph of prices and quantities using geom
 
 ```{r p_q, echo=FALSE}
 
+coffee %>%
+  ggplot(aes(x = qu)) +
+    geom_point(aes(y = cprice))
+  
 
 ```
 Now do the same thing but only for the first quarter:
 
 ```{r filter}
 
+coffee %>%
+  filter(q1 == 1) %>%
+  ggplot(aes(x = qu)) +
+    geom_point(aes(y = cprice))
 
 ```
 
 Now consider for q2, q3 and q4.
+
+```{r filter1}
+
+coffee %>%
+  filter(q2 == 1) %>%
+  ggplot(aes(x = qu)) +
+    geom_point(aes(y = cprice))
+
+```
+
+```{r filter2}
+
+coffee %>%
+  filter(q3 == 1) %>%
+  ggplot(aes(x = qu)) +
+    geom_point(aes(y = cprice))
+
+```
 
 ## Assess relationship between tea price and quantity demanded of coffee
 
 
 ```{r tprice_q}
 
+coffee %>%
+  ggplot(aes(x = qu)) +
+    geom_point(aes(y = tprice))
 
 ```
 
@@ -142,7 +200,16 @@ coffee %>%
 Look at the relationship between the price of coffee and the price of tea:
 
 ```{r tprice_cprice}
+coffee %>%
+  ggplot(aes(x = tprice)) + 
+    geom_point(aes(y = cprice))
 
+```
+```{r tprice_cprice}
+coffee %>%
+  filter(q4==1) %>%
+  ggplot(aes(x = tprice)) + 
+    geom_point(aes(y = cprice))
 
 ```
 
@@ -151,7 +218,9 @@ Look at the relationship between the price of coffee and the price of tea:
 Produce a correlation matrix for qu, cprice, tprice, wprice, bprice, incom: 
 
 ```{r cor}
-
+coffee %>%
+  select(qu, cprice, tprice, wprice, bprice, incom) %>%
+  cor()
 
 ```
 ## create log variables  
@@ -175,30 +244,38 @@ coffee <- coffee %>%
 Regress log quantity on log price and seasonal dummies and store as q_p1:
 
 ```{r q_p}
-
+q_p1 <- lm(ln_qu ~ ln_cprice + q2 + q3 + q4 , coffee)
+summary(q_p1)
 
 ```
 Including tea price, save as q_p2:
 
 ```{r q_p2}
-
+q_p2 <- lm(ln_qu ~ ln_cprice + q2 + q3 + q4 + tprice, coffee)
+summary(q_p2)
 
 ```
 Include income, save as q_p3:
 
 ```{r q_p3}
-
+q_p3 <- lm(ln_qu ~ ln_cprice + q2 + q3 + q4 + tprice + incom, coffee)
+summary(q_p3)
 
 ```
 # Estimating theta
 
 ## Instrumental variable regressions
 
-Run an instrumental variable regression, using prices, quantities, seasonal dummies and instrument, first without team and income, and secondly with tea and income:
+Run an instrumental variable regression, using prices, quantities, seasonal dummies and instrument, first without tea and income, and secondly with tea and income:
 
 ```{r iv1}
 library("AER")
 
+iv1 <- ivreg(ln_qu ~ q2 + q3 + q4 + ln_cprice | ln_bprice + q2 + q3 + q4 , data = coffee)
+summary(iv1)
+
+iv2 <- ivreg(ln_qu ~ q2 + q3 + q4 + incom + tprice + ln_cprice | ln_bprice + q2 + q3 + q4 + incom + tprice , data = coffee)
+summary(iv2)
 
 ```
 ## Now lets show the adjusted learner index
@@ -207,30 +284,35 @@ Compute the adjusted lerner index using our cost information and our estimate of
 
 ```{r lerner_adj, echo= FALSE}
 
-k= # kg of beans per kg of coffee
-c0= # by assumption (4 guilders)
-gamma=
+k = 1.19 # kg of beans per kg of coffee
+c0= 4 # by assumption (4 guilders)
+gamma = -0.276
 
 # obtain the cost function    
-cost = 
+cost = c0 + k*coffee$bprice
 
 # compute Lerner index
-coffee$Ln= 
+coffee$Ln= (coffee$cprice - cost) / coffee$cprice
   
 # now compute adjusted Lerner index  
-coffee$Ln_adj=
+coffee$Ln_adj = -gamma * coffee$Ln 
 
 # summary statistics for our adjusted Lerner index  
 summary(coffee$Ln_adj)
 
 # consider adjusted lerner for only q1, using filter
 coffee %>%
+  filter(q4 == 1) %>%
+  select(Ln_adj) %>%
+  summary(coffee$Ln_adj)
 
 
 ```
 Now, consider for q2, q3, and q4.
 
 ## Estimating conduct parameter
+
+First, regress prices on costs
 
 ```{r conduct}
 conduct1 <- lm(cprice ~ cost + q1 + q2 + q3 -1, data = coffee) # omits intercept

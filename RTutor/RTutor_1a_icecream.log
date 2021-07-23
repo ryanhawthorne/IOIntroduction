@@ -1,0 +1,4 @@
+{"type":["init_ps"],"time":["2021-03-10 19:12:13"],"user":["RyanHawthorne"],"umph":[1615396333.476],"ok":[true]}
+,
+{"type":["check_chunk"],"time":["2021-03-10 19:12:13"],"user":["RyanHawthorne"],"umph":[1615396333.9874],"ok":[false],"chunk":[1],"ex":[1],"e.ind":[1],"code":["list.files()"],"message":["\nSorry, but I cannot find the file \"ice cream sales.csv\" in your current working directory."]}
+,
