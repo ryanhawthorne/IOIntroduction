@@ -5,16 +5,12 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library("tidyverse")
-library("kableExtra")
-
-
 ```
 
-## Loading files 
+## Opening a dataset and considering it in R
 
 a) Make sure you have all files for this problem saved to the directory where you saved this Rmd file. This means there should be a data set file "ice cream sales.csv". Run the command `list.files()` to list all files in your working directory:
-```{r "1__a", include=TRUE}
+```{r "1__a", include=FALSE}
 list.files()
 ```
 
@@ -23,46 +19,64 @@ b) Now load the file "ice cream sales.csv" into a data frame with name `dat` by 
 
 ```{r "1__b"}
 
-# enter your code here ...
-dat <- read.csv("ice cream sales.csv")
 
 ```
 
-Check your problem set after each chunk.
+c) Describe `dat` using the function `str`, show column names `colnames` using  and show the dimension of dat using `dim`.
+.
 
+```{r "1__c1"}
 
-c) Show the column names of `dat`.
-
-```{r "1__c"}
-
-# enter your code here ...
-colnames(dat)
 
 ```
 
-Remember: You can type any time `stats()` in your R console to see your progress in the problem set.
+```{r "1__c2"}
 
-d) Show the column "p" of dat (p stands for price). Use the $ syntax.  
+
+```
+
+```{r "1__c3"}
+
+
+```
+
+d) Show the column "q" of dat (q stands for quantity). Use the $ syntax.  
 
 ```{r "1__d"}
 
-# enter your code here ...
-dat$p
 
 ```
 
-e) Make scatterplot of prices on the x-axis against quantities on the y-axis using the command `plot`.
+e) Show the first rows of `dat` use the `head` function.  
 
 ```{r "1__e"}
 
-# enter your code here ...
 
-plot(p ~ q, dat)
+```
+
+f) Make scatterplot of prices on the x-axis against quantities on the y-axis using the command `plot`.
+
+```{r "1__f"}
+
+
 
 ```
 
 
-## Understanding relationships between prices and quantities
+g) Learning ggplot
+
+The package ggplot2 allows us to customise our graphs in more detail.
+
+```{r "1__g"}
+
+# enter your code here ...
+library(ggplot2)
+
+
+```
+
+
+## Thinking about endogeneity
 
 Could such a positive relationship between price and sold quantity be created from a 'normal' market with a decreasing demand function? We will first analyse such a model theoretically and then simulate it.
 
@@ -70,8 +84,6 @@ a) Let p be a vector of possible prices consisting of all integer numbers from 0
 
 ```{r "2_a"}
 
-# enter your code here ...
-p <- c(0:100)
 
 ```
 
@@ -85,7 +97,6 @@ a = 100
 b = 2
 
 # enter your code here ...
-q = a -b * p
 
 ```
 
@@ -95,7 +106,6 @@ c) Let pi be a vector that contains for each price p the firm's profit, assuming
 c = 11
 
 # enter your code here ...
-pi = p * q - c * q 
 
 ```
 
@@ -104,7 +114,6 @@ d) Plot the profits pi (on the y-axis) against the vector of prices p (on the x-
 ```{r "2_d"}
 
 # enter your code here ...
-plot(pi ~ p)
 
 ```
 
@@ -113,7 +122,6 @@ e) Let ind.opt be the index of pi that has the highest profits
 ```{r "2_e"}
 
 # enter your code here ...
-ind.opt = which.max(pi)
 
 ```
 
@@ -122,17 +130,13 @@ f) Let p.opt.grid be that price from your vector p that yields the highest profi
 ```{r "2_f"}
 
 # enter your code here ...
-p.opt.grid = p [ind.opt] 
 
 ```
 
 g) Just uncomment the following code to draw a vertical line in your plot at the position of p.opt.grid
 
 ```{r "2_g"}
-plot(p, pi, 
-  abline(v=p.opt.grid))
-
-
+# abline(v=p.opt.grid)
 ```
 
 h) Let `p.opt` be the profit maximizing price from all possible prices. This means compute `p.opt` by using the analytical formula for profit maximizing prices. The formula uses the parameters a, b and c.
@@ -140,7 +144,6 @@ h) Let `p.opt` be the profit maximizing price from all possible prices. This mea
 ```{r "2_h"}
 
 # enter your code here ...
-p.opt = a / (2 * b) + c / 2
 
 ```
 
@@ -149,19 +152,15 @@ p.opt = a / (2 * b) + c / 2
 i) Just uncomment the following code to add a blue vertical line to your plot at the position of p.opt 
 
 ```{r "2_i"}
-plot(p, pi, 
-  abline(v=p.opt, col="blue"))
-
-
+# abline(v=p.opt, col="blue")
 ```
 
-## Comparing random demand shocks
+## Simulating random data
 
 We will now extend our model from exercise 2 by a random shock and simulate data from our model for
 
 ```{r "3"}
 T = 100
-
 ```
 
 different periods.
@@ -171,7 +170,6 @@ a) Let eps be a vector of T normally distributed random variables with mean 0 an
 ```{r "3_a"}
 
 # enter your code here ...
-eps <- rnorm(T, mean=0, sd = 10)
 
 ```
 
@@ -184,16 +182,6 @@ a  = a0 + eps
 
 This means eps is a random 'demand shock' that yields to a different demand function in each period. Sometimes demand at a given price p is higher, sometimes it is lower. You can think of eps containing factors like the weather. We can loosely interpret the resulting intercept of the demand function 'a' as a measure of 'market size' for every period.
 
-Plot "a" to see how the market size differs between periods.
-
-```{r "3_b_2"}
-
-# enter your code here ...
-plot(a)
-
-```
-
-
 The slope of the demand function shall for simplicity be the same in all periods:
 
 ```{r "3_b_3"}
@@ -205,7 +193,6 @@ c) The variable costs c shall also be a random variable that differs between per
 ```{r "3_c"}
 
 # enter your code here ...
-c = runif(T, min=0, max = 1)
 
 ```
 
@@ -215,8 +202,6 @@ d) Let p be the vector of profit maximizing prices (see exercise 2) for each of 
 ```{r "3_d"}
 
 # enter your code here ...
-p = a / (2 * b) + c / 2
-
 
 ```
 
@@ -225,7 +210,6 @@ e) Compute a vector q of outputs for every period using the demand function from
 ```{r "3_e"}
 
 # enter your code here ...
-q = a -b * p
 
 ```
 
@@ -234,7 +218,6 @@ f) Show a plot with prices on the x-Axis and output q on the y-Axis.
 ```{r "3_f"}
 
 # enter your code here ...
-plot( p ~ q)
 
 ```
 
@@ -243,7 +226,6 @@ g) Compute the correlation between p and q
 ```{r "3_g"}
 
 # enter your code here ...
-cor(p, q)
 
 ```
 
@@ -252,28 +234,17 @@ h) Run a linear regression of output against prices using the command: lm(q~p)
 ```{r "3_h"}
 
 # enter your code here ...
-lm(q~p)
 
 ```
 
-i) Look at the scatter plot and the estimated intercept and slope from h). Does the p-q relationship represent a noisy version of the demand function: q = a-b*p? 
-
-```{r "3_i"}
-# Enter "yes" or "no" 
-
-# enter your code here ...
-
-```
-
-j) Compute the correlations between the demand shock eps and output q, and the correlation between eps and prices p.
+i) Compute the correlations between the demand shock eps and output q, and the correlation between eps and prices p.
 
 ```{r "3_j"}
 
 # enter your code here ...
-cor(eps, q)
+
 
 # enter your code here ...
-cor(eps, p)
 
 ```
 

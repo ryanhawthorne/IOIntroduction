@@ -16,14 +16,14 @@ T = 20
 beta0 = 100
 beta1 = -1;
 # Draw vector of random prices uniformly distributed between 30 and 50
-p = runif(T, min = 30, max = 50) 
+p = ___ 
 
 # Draw vector of demand shocks eps normally distributed with mean 0 and
 # standard deviation 2
-eps = rnorm(T, mean = 0, sd = 2)
+eps = ___
 
 # Compute the resulting demand q
-q = beta0 + eps + beta1 * p
+q = ___
 
 
 ```
@@ -34,7 +34,6 @@ b) Now use the function `lm` to estimate the demand function via OLS.
 ```{r "1_b"}
 
 # enter your code here ...
-lm(q ~ p)
 
 ```
 
@@ -42,10 +41,9 @@ c) Call the same `lm` command but store the result in a variable called `reg`. N
 ```{r "1_c"}
 
 # enter your code here ...
-reg <- lm(q ~ p)
+
 
 # enter your code here ...
-summary(reg)
 
 ```
 
@@ -62,19 +60,17 @@ d) While `summary` prints the results it does not allow us to use these values e
 ```{r "1_d"}
 
 # enter your code here ...
-coef(reg)
+
 ```
 
 Now follow the comments in the next code chunk to get all relevant columns of the shown coefficient table as a data frame.
 ```{r "1_d_2"}
 # Load the package broom
-library(broom)
+
 # Call the function tidy on reg and store the result in the
 # variable sum
-sum <- tidy(reg)
 
 # Show sum 
-sum
 
 # enter your code here ...
 
@@ -83,11 +79,10 @@ sum
 e) We now want to compute the 95% confidence intervals for our estimated coefficients using the rule of thumb from the lecture slides (estimate plus-minus two standard errors). Replace the ___ in the code below that uses the `dplyr` function `mutate`:
 
 ```{r "1_e",optional=TRUE, eval=FALSE, include = FALSE}
-library(dplyr)
 sum %>%
   mutate(
     conf.lower = estimate - 2 * std.error,
-    conf.upper = estimate + 2 * std.error
+    conf.upper = ___
   )
 
 # enter your code here ...
@@ -100,7 +95,6 @@ To compute the exact 95% confidence intervals (not our rule of thumb) call now t
 ```{r "1_e_2"}
 
 # enter your code here ...
-confint(reg)
 
 ```
 
@@ -109,25 +103,14 @@ f) Now we want to write an R function called `sim.and.est`. Add the code as expl
 
 ```{r "1_f", eval=FALSE, include = FALSE}
 # A function that simulates demand data and estimates the demand function
-sim.and.est = function(T = 10) { 
+sim.and.est = function(T=20) { 
   # Insert here your code from a)
   # to simulate our demand data
   # 
   # But don't add the line 
   # T=20
   # since we have the parameter T as function argument
-  beta0 = 100
-  beta1 = -1;
-  # Draw vector of random prices uniformly distributed between 30 and 50
-  p = runif(T, min = 30, max = 50) 
 
-  # the cat in the hat
-  # Draw vector of demand shocks eps normally distributed with mean 0 and
-  # standard deviation 2
-  eps = rnorm(T, mean = 0, sd = 2)
-
-  # Compute the resulting demand q
-  q = beta0 + eps + beta1 * p
     
   # To make the function better readable
   # Select your entered code above
@@ -140,7 +123,7 @@ sim.and.est = function(T = 10) {
   
   # Estimate demand function  
   reg = lm(q~p)
-      
+
   # Compute confidence interval
   conf = confint(reg,"p")
   
@@ -160,45 +143,36 @@ sim.and.est = function(T = 10) {
 
 ```
 
-g) Call `sim.and.est` twice with the argument T=10.
+g) Call `sim.and.est` twice with the argument T=20.
 
 ```{r "1_g"}
 
 # enter your code here ...
-sim.and.est(T = 10)
 
 ```
 
 You don't get the same estimates `beta1.hat` in your two calls. Neither are the estimates exactly equal to the true coefficient `beta1=-1`, but they are also not too far away. You also see that the confidence intervals are random variables that change between samples.
 
-Now call `sim.and.est` twice with the Argument `T=1000`. 
+Now call `sim.and.est` twice with the Argument `T=500`. 
 
 ```{r "1_g_2"}
 
 # enter your code here ...
-sim.and.est(T=1000)
 
 ```
 
 With this larger sample size, your estimates are now most likely relatively close to the true parameters. Does this suggest that our estimator is "consistent" or "inconsistent"?
 
-```{r "1_g_3"}
-# Write down "consistent" or "inconsistent" (including the quotes "")
-
-# enter your code here ...
-
-```
-
 Corresponding to the smaller variation of `beta1.hat` also the confidence intervals for each estimate are smaller with a larger sample size T.
 
 
 h) The following code runs a Monte-Carlo simulation study, which helps to systematically analyse our estimator. The call to `simulation.study` below does the following:
- - it runs the function `sim.and.est` for each value of `T=10` and `T=100` exactly `repl=3` times
+ - it runs the function `sim.and.est` for each value of `T=20` and `T=200` exactly `repl=3` times
  - it combines the data frames from each run of `sim.and.est`, adds the corresponding value of `T` and returns the resulting data frame.
  
 ```{r "1_h", eval=FALSE, include = FALSE}
 library(sktools)
-simulation.study(sim.and.est, par=list(T=c(10,100)),repl=3)
+simulation.study(sim.and.est, par=list(T=c(20,200)),repl=3)
 ```
 
 You can change the argument `repl` above to run larger simulation studies. In the next exercise, we will analyse the results from a large simulation run.
@@ -215,15 +189,13 @@ Load that data set into the variable `dat` using the function `readRDS`. Make su
 ```{r "2_a"}
 
 # enter your code here ...
-dat <- readRDS("ols_sim.Rds")
+
 ```
 
 Now use the function `head` to show the first rows of `dat`:
 ```{r "2_a_2"}
 
 # enter your code here ...
-str(dat)
-head(dat)
 
 ```
 
@@ -231,9 +203,7 @@ b) Replace the ___ in the filter command below to store in the data.frame `d10` 
 
 ```{r "2_b", eval=FALSE, include = FALSE}
 library(dplyr)
-d10 = filter(dat, T == 10)
-d10 <- dat %>%
-  filter(T == 10)
+d10 = filter(dat, T == ___)
 
 # enter your code here ...
 
@@ -244,10 +214,6 @@ c) Using the command `hist`, draw a histogram of your simulated estimates `beta1
 ```{r "2_c"}
 
 # enter your code here ...
-hist(d10$beta1.hat,  
-     breaks = 5,
-     col = "Red",
-     xlab = "b1 estimate")
 
 ```
 
@@ -258,9 +224,6 @@ d) Using the corresponding R functions, compute the standard deviation and mean 
 ```{r "2_d",optional=TRUE}
 
 # enter your code here ...
-sd(d10$beta1.hat)
-mean(d10$beta1.hat)
-
 
 ```
 
@@ -273,12 +236,8 @@ e) Now also compute the simulated Bias and Mean Squared Error (MSE) of `beta1.ha
 beta1 = -1
 
 # enter your code here ...
-bias = mean(d10$beta1.hat - beta1)
-bias
 
 # enter your code here ...
-mse = mean((d10$beta1.hat - beta1) ^ 2 )
-mse
 
 
 # enter your code here ...
@@ -297,10 +256,9 @@ f) Let us now compute how often the true parameter `beta1` is inside the 95% con
 # Replace the ___ to complete the code
 times.in.conf = sum(
     d10$beta1 > d10$conf.lower &
-    d10$beta1 < d10$conf.upper         
+    ___         
   )
 # Show times.in.conf
-times.in.conf
 
 # enter your code here ...
 
@@ -321,13 +279,6 @@ ggplot(dat, aes(x=beta1.hat, fill=as.factor(T))) +
 ```
 
 You see how for `T=100` the estimator `beta1.hat` is distributed much closer around the true parameter `beta1=-1`.
-
-We can also use `geom_density` to see a nicer approximation of the distributions of `beta1.hat` than with a histogram:
-
-```{r "2_g_2", eval=FALSE, include = FALSE}
-ggplot(dat, aes(x=beta1.hat, fill=as.factor(T))) +
-  geom_density(alpha=0.5)
-```
 
 h) We now want to use some `dplyr` code to conveniently compare the estimator for `T=10` and `T=100`. Just run the following code to compute the MSE of `beta1.hat` for both `T`. 
 ```{r "2_h", eval=FALSE, include = FALSE}
@@ -350,14 +301,10 @@ dat %>%
   group_by(T) %>%
   summarize(
     mse = mean((beta1.hat-beta1)^2),
-    sd = sd(beta1.hat)
+    sd = ___
   )
 
 # enter your code here ...
-
-dat %>%
-  group_by(T) %>%
-  summary()
 
 ```
 
@@ -384,7 +331,7 @@ c = runif(T, 20,30)
 
 # Compute the profit maximizing prices p 
 
-p = (beta0 + eps)/(-2*beta1) + c / 2
+p = ___
 
 # enter your code here ...
 
@@ -397,19 +344,10 @@ b) Now estimate the demand function via OLS using the R function `lm`. Save the 
 ```{r "3_b"}
 
 # enter your code here ...
-reg <- lm(q ~ p)
-summary(reg)
 
 ```
 
 Calculate in your head roughly the 95% confidence interval for `beta1.hat` (i.e. the estimated coefficient for `p`). Does the true coefficient `beta1 = -1` lie in this 95% confidence interval?
-
-```{r "3_b_2", eval=FALSE, include = FALSE}
-# Type "yes" or "no"
-
-# enter your code here ...
-
-```
 
 Your estimate `beta1.hat` is likely more than 20 standard errors away from the true coefficient `beta1`. That is super far away. Recall that the rule of thumb for the 95% confidence interval is plus-minus 2 standard errors around the true coefficient.
 
@@ -424,8 +362,7 @@ Compute that expression (adapted to our regression) and save the result in the v
 ```{r "3_d"}
 
 # enter your code here ...
-bias.hat <- cor(p,eps)*sd(eps)/sd(p)
-bias.hat
+
 
 # enter your code here ...
 
@@ -436,9 +373,7 @@ Save now in the variable `beta1.hat` the estimate for `beta1` from your regressi
 ```{r "3_d_2"}
 
 # enter your code here ...
-beta1.hat <- coef(reg)[[2]]
-beta1.hat
-beta1.hat - beta1
+
 
 # enter your code here ...
 
@@ -454,8 +389,7 @@ What happens if we use the *residuals*
 ```{r "3_e"}
 
 # enter your code here ...
-eps.hat = resid(reg)
-  
+
 ```
 
 Now compute two correlations: the correlation between the explanatory variable `p` and the *disturbance* `eps` and the correlation between  `p` and the *residual* `eps.hat`.
@@ -463,8 +397,6 @@ Now compute two correlations: the correlation between the explanatory variable `
 ```{r "3_e_2"}
 
 # enter your code here ...
-cor(p, eps)
-cor(p, eps.hat)
 
 ```
 
@@ -521,7 +453,6 @@ Run now the simulation study again in the chunk below with more replications, e.
 ```{r "3_f_2"}
 
 # enter your code here ...
-dat <- simulation.study(sim.and.est2,par = list(T=100, price.type=c("random","optimal")), repl=100)
 
 ```
 
@@ -529,7 +460,7 @@ g) We now want to plot the distributions of `beta1.hat` for the case of random a
 
 ```{r "3_g", eval=FALSE, include = FALSE}
 library(ggplot2)
-ggplot(dat, aes(x=beta1.hat, fill=price.type)) +
+ggplot(dat, aes(x=___, fill=___)) +
   geom_density()
 
 # enter your code here ...
@@ -541,17 +472,3 @@ You see that for random prices our estimator `beta1.hat` is distributed around t
 
 For the case of optimal profit maximizing prices the estimator `beta1.hat` is distributed far off the true `beta1`.
 
-h) To compute the expected value of `beta1.hat` for each price type (random or optimal) correctly replace the `___` in the code below.
-
-```{r "3_h", eval=FALSE, include = FALSE}
-dat %>% 
-  group_by(price.type) %>%
-  summarize(mean.beta1.hat = mean(beta1.hat))
-
-# enter your code here ...
-
-```
-
-We see that for the case of optimal profit maximizing prices our estimator `beta1.hat` is distributed around a value of roughly `0.62`. This value also has a name: it is the *coefficient of the linear projection*. It is useful if we are just concerned in predicting the output based on observed prices. But not if we are interested in the causal effect of prices on output (which is `beta1=-1`). 
-
-We will come back later in this course to the distinction between predicting a dependent variable and estimating causal effects later.
