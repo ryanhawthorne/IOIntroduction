@@ -1,8 +1,9 @@
 # Welcome and acknowledgement
 
-Welcome to this tutorial on R and econometrics for industrial organisation, accompanying Prof. Lukasz Grzybowski's lectures. This tutorial closely follows the work of Prof. Sebastian Kranz (Ulm University):
+Welcome to this tutorial on R and econometrics for industrial organisation, accompanying Prof. Lukasz Grzybowski's lectures. This tutorial closely follows the work of:
+- Prof. Sebastian Kranz (Ulm University), on market analysis with econometrics and machine learning: https://github.com/skranz/MarketAnalysis
+- Prof. Lukasz Grzybowski (Telecom Paristech / University of Cape Town): quantitative methods on industrial organisation
 
-- Market analysis with econometrics and machine learning: https://github.com/skranz/MarketAnalysis
 
 # Getting started: setting up R, Latex and Github
 
